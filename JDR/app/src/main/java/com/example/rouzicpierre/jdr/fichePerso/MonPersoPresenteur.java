@@ -27,23 +27,23 @@ public class MonPersoPresenteur {
         perso =Perso.getMonperso();
         if (true) {
             this.monPersoActivity = monPersoActivity;
-            ListStat.add("Capacité de combat");
+            ListStat.add("CC");
             ValeurStat.add(String.valueOf(perso.getCC()));
-            ListStat.add("Capacité de tir");
+            ListStat.add("CT");
             ValeurStat.add(String.valueOf(perso.getCT()));
-            ListStat.add("Agilité");
+            ListStat.add("Ag");
             ValeurStat.add(String.valueOf(perso.getAg()));
-            ListStat.add("Force");
+            ListStat.add("F");
             ValeurStat.add(String.valueOf(perso.getF()));
-            ListStat.add("Endurance");
+            ListStat.add("E");
             ValeurStat.add(String.valueOf(perso.getE()));
-            ListStat.add("Force Mental");
+            ListStat.add("FM");
             ValeurStat.add(String.valueOf(perso.getFM()));
-            ListStat.add("Inteligence");
+            ListStat.add("Int");
             ValeurStat.add(String.valueOf(perso.getInt()));
-            ListStat.add("Perception");
+            ListStat.add("P");
             ValeurStat.add(String.valueOf(perso.getP()));
-            ListStat.add("Sociabiliter");
+            ListStat.add("Soc");
             ValeurStat.add(String.valueOf(perso.getSoc()));
 
         }
@@ -60,6 +60,9 @@ public class MonPersoPresenteur {
         }
         return monPersoPresenteur;
     }
+
+
+
 
 
     public ArrayList<String> getListStat() {

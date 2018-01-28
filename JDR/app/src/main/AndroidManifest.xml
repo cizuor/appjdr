@@ -2,13 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.rouzicpierre.jdr">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
+        android:name="com.orm.SugarApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name="com.orm.SugarApp">
+        android:theme="@style/AppTheme">
         <activity android:name=".Menu">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -16,8 +19,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".fichePerso.MonPersoActivity" />
-
+        <activity
+            android:name=".fichePerso.MonPersoActivity"
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" />
+        <!--
+        <meta-data
+            android:name="com.parse.SERVER_URL"
+            android:value="https://parseapi.back4appcom/"/>
+        <meta-data
+            android:name="com.parse.APPLICATION_ID"
+            android:value="Mm6O7tRLRJqh9xamUmmscI8bZRMZWS9L7EnBxSOB" />
+        -->
         <meta-data
             android:name="DATABASE"
             android:value="jdr.db" />
@@ -31,7 +43,13 @@
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="com.example.rouzicpierre.jdr" />
 
-        <activity android:name=".nouveauPerso.NouveauPerso"></activity>
+        <activity
+            android:name=".nouveauPerso.NouveauPerso"
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" />
+        <activity android:name=".nouveauPerso.race.NouveauPersoParse" />
+        <activity android:name=".nouveauPerso.TalentRaceChoix.TalentRaceChoix" />
+        <activity android:name=".nouveauPerso.classe.ClassChoix" />
+        <activity android:name=".nouveauPerso.dee.DeePerso"></activity>
     </application>
 
 </manifest>

@@ -2,6 +2,9 @@ package com.example.rouzicpierre.jdr.fichePerso;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,7 @@ import android.widget.TextView;
 import android.view.View.OnClickListener;
 
 import com.example.rouzicpierre.jdr.LanceurDeDee;
+import com.example.rouzicpierre.jdr.Perso;
 import com.example.rouzicpierre.jdr.R;
 
 import java.util.ArrayList;
@@ -23,6 +27,7 @@ import java.util.ArrayList;
 public class StatAdapter extends ArrayAdapter<String>{
 
         customButtonListener customListner;
+        Perso perso;
 
         public interface customButtonListener {
             public void onButtonClickListner(int position,String value);
@@ -43,11 +48,12 @@ public class StatAdapter extends ArrayAdapter<String>{
             this.data = dataItem;
             this.valeurstat = valeurstat;
             this.context = context;
+            perso = Perso.getMonperso();
         }
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-            ViewHolder viewHolder;
+            final ViewHolder viewHolder;
             if (convertView == null) {
                 LayoutInflater inflater = LayoutInflater.from(context);
                 convertView = inflater.inflate(R.layout.statlist, null);
@@ -92,8 +98,30 @@ public class StatAdapter extends ArrayAdapter<String>{
                 }
             });
 
+
+            viewHolder.valeurstat.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (viewHolder.valeurstat.getText().toString()== null || viewHolder.valeurstat.getText().toString().equals("")) {
+                        perso.mapperso.put(data.get(position),0);
+                    }else{
+                        perso.mapperso.put(data.get(position),Integer.parseInt(viewHolder.valeurstat.getText().toString()));
+                    }
+                }
+            });
+
             return convertView;
         }
+
+
 
         public class ViewHolder {
             TextView nomstat;

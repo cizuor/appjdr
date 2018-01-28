@@ -4,6 +4,8 @@ import com.orm.SugarRecord;
 import com.orm.dsl.Ignore;
 import com.orm.dsl.Table;
 
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 /**
@@ -44,12 +46,13 @@ public class Perso{
     private String nom;
     private String classe;
     private String race;
+    private int arme = 0;
     @Ignore
     public Map mapperso;
 
 
 
-    public void actualise(){
+    public void actualisePerso(){
 
         CC= (int) mapperso.get("CC");
         CT= (int) mapperso.get("CT");
@@ -81,10 +84,48 @@ public class Perso{
         classe = (String) mapperso.get("Classe");
         race = (String) mapperso.get("Race");
         nom = (String) mapperso.get("Nom");
+        arme = (int) mapperso.get("Arme");
+
+    }
+
+    public void actualiseMap(){
+
+        mapperso.put("CC",CC);
+        mapperso.put("CT",CT);
+        mapperso.put("Ag",Ag);
+        mapperso.put("F",F);
+        mapperso.put("E",E);
+        mapperso.put("FM",FM);
+        mapperso.put("At",At);
+        mapperso.put("Int",Int);
+        mapperso.put("Mag",Mag);
+        mapperso.put("P",P);
+        mapperso.put("Soc",Soc);
+        mapperso.put("PVmax",PVmax);
+        mapperso.put("PVactuel",PVactuel);
+        mapperso.put("Bpoid",bonnuspoid);
+        mapperso.put("BCA",bonnusCA);
+        mapperso.put("BCD",bonnusCD);
+        mapperso.put("BD",bonnusDegat);
+        mapperso.put("BA",bonnusArmure);
+        mapperso.put("BBE",bonnusBE);
+        mapperso.put("BPS",bonnusPuissSort);
+        mapperso.put("BRS",bonnusReussitSort);
+        mapperso.put("PD",pointDeDestin);
+        mapperso.put("PO",PO);
+        mapperso.put("PA",PA);
+        mapperso.put("XPact",xpactuel);
+        mapperso.put("XPtot",xptotal);
+        mapperso.put("RM",resmagique);
+        mapperso.put("Classe",classe);
+        mapperso.put("Race",race);
+        mapperso.put("Nom",nom);
+        mapperso.put("Arme",arme);
 
     }
 
     public Perso() {
+        mapperso = new HashMap();
 
     }
 
@@ -356,9 +397,17 @@ public class Perso{
         this.id = id;
     }
 
+    public int getArme() {
+        return arme;
+    }
+
+    public void setArme(int arme) {
+        this.arme = arme;
+    }
+
     @Override
     public String toString() {
-        return "Perso{" +
+        return "PersoParse{" +
                 "race='" + race + '\'' +
                 ", CC=" + CC +
                 ", CT=" + CT +
