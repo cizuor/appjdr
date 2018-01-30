@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.rouzicpierre.jdr.Combat.Combat;
 import com.example.rouzicpierre.jdr.fichePerso.MonPersoActivity;
 import com.example.rouzicpierre.jdr.nouveauPerso.race.NouveauPersoParse;
 import com.orm.SugarRecord;
@@ -23,6 +24,9 @@ public class Menu extends AppCompatActivity {
 
     @BindView(R.id.buttonmonperso) Button monperso;
     @BindView(R.id.nompersofetch)    EditText nom;
+    @BindView(R.id.menuButtonCombat) Button combat;
+    @BindView(R.id.menuEditEquipe) EditText equipe;
+    public static int Equipe;
     Perso perso;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +63,14 @@ public class Menu extends AppCompatActivity {
         race.saveInBackground();*/
 
 
+        combat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickCombat();
+            }
+        });
+
+
     }
 
     @Override
@@ -73,7 +85,7 @@ public class Menu extends AppCompatActivity {
         }
     }
 
-    public void gotomonperso (View view){
+    public void goToMonPerso(View view){
         perso.actualiseMap();
         Intent appel = new Intent(Menu.this, MonPersoActivity.class);
         startActivity(appel);
@@ -81,14 +93,15 @@ public class Menu extends AppCompatActivity {
 
     }
 
-    public void gotonouveauperso(View view){
+    public void goToNouveauPerso(View view){
         Intent appel = new Intent(Menu.this, NouveauPersoParse.class);
         startActivity(appel);
     }
 
 
-    public void gotochargerperso (View view){
+    public void goToChargerPerso(View view){
 
+        // recuperation du personnage en BDD local
         if (nom.getText().toString() == null || nom.getText().toString().equals("") ){
             Toast toast = Toast.makeText(this, " nom de perso invalide ",Toast.LENGTH_LONG);
             toast.show();
@@ -105,15 +118,25 @@ public class Menu extends AppCompatActivity {
                 toast.show();
             }
         }
-
         /*SugarRecord.save(perso);
 
         List<PersoParse> p = SugarRecord.find(PersoParse.class,"nom = ?","test");
         //PersoParse p = SugarRecord.findById(PersoParse.class,1);
         Log.i("test","test = "+p.toString());*/
-
     }
 
+
+    public void onClickCombat(){
+        if (!equipe.getText().toString().equals("")) {
+            Equipe=Integer.parseInt(equipe.getText().toString());
+            Intent myIntent = new Intent(Menu.this, Combat.class);
+            //myIntent.putExtra("key", value); //Optional parameters
+            this.startActivity(myIntent);
+        }else{
+            Toast toast = Toast.makeText(this, "choisir equipe ", Toast.LENGTH_LONG);
+            toast.show();
+        }
+    }
 
 
 }

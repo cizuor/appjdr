@@ -49,7 +49,9 @@
         <activity android:name=".nouveauPerso.race.NouveauPersoParse" />
         <activity android:name=".nouveauPerso.TalentRaceChoix.TalentRaceChoix" />
         <activity android:name=".nouveauPerso.classe.ClassChoix" />
-        <activity android:name=".nouveauPerso.dee.DeePerso"></activity>
+        <activity android:name=".nouveauPerso.dee.DeePerso" />
+        <activity android:name=".Combat.Combat" android:screenOrientation="landscape"/>
+        <activity android:name=".Bestiaire.Bestiaire" android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>

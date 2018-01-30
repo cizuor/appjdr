@@ -14,9 +14,9 @@ public class CompAPI {
     public static String TABLE_COMP="Comp";
     public static String COLONNE_NOM = "Nom";
     public static String COLONNE_DESCRIPTION = "Description";
-    public static String COLONE_ISTALENT = "isTalent";
-    public static String COLONE_TYPE = "Type";
-    public static String COLONE_BONNUS = "bonnus";
+    public static String COLONNE_ISTALENT = "isTalent";
+    public static String COLONNE_TYPE = "Type";
+    public static String COLONNE_BONNUS = "bonnus";
 
 
 

@@ -1,5 +1,10 @@
 package com.example.rouzicpierre.jdr;
 
+import android.util.Log;
+
+import com.example.rouzicpierre.jdr.api.MonstreCombatAPI;
+import com.parse.ParseObject;
+
 import java.util.Random;
 
 /**
@@ -38,8 +43,6 @@ public class LanceurDeDee {
         }else{
             return degat;
         }
-
-
     }
 
 
@@ -56,8 +59,44 @@ public class LanceurDeDee {
         }else {
             return D1+D2;
         }
-
-
     }
+
+
+    public void DégatSubit(ParseObject cible , String typeDegats, int NBDegats){
+        switch (typeDegats){
+            case "physique":
+                if (cible.getInt(MonstreCombatAPI.COLONNE_ARMURE)>NBDegats){
+                    cible.increment(MonstreCombatAPI.COLONNE_ARMURE,-NBDegats);
+                    cible.saveInBackground();
+                }else if (cible.getInt(MonstreCombatAPI.COLONNE_ARMURE)!=0){
+                    cible.increment(MonstreCombatAPI.COLONNE_PV,-(NBDegats-cible.getInt(MonstreCombatAPI.COLONNE_ARMURE)));
+                    cible.put(MonstreCombatAPI.COLONNE_ARMURE,0);
+                    cible.saveInBackground();
+                }else{
+                    cible.increment(MonstreCombatAPI.COLONNE_PV,-NBDegats);
+                    cible.saveInBackground();
+                }
+                break;
+            case "magique":
+                if (cible.getInt(MonstreCombatAPI.COLONNE_RM)>NBDegats){
+                    cible.increment(MonstreCombatAPI.COLONNE_RM,-NBDegats);
+                    cible.saveInBackground();
+                }else if (cible.getInt(MonstreCombatAPI.COLONNE_RM)!=0){
+                    cible.increment(MonstreCombatAPI.COLONNE_PV,-(NBDegats-cible.getInt(MonstreCombatAPI.COLONNE_RM)));
+                    cible.put(MonstreCombatAPI.COLONNE_RM,0);
+                    cible.saveInBackground();
+                }else{
+                    cible.increment(MonstreCombatAPI.COLONNE_PV,-NBDegats);
+                    cible.saveInBackground();
+                }
+                break;
+            case "brut":
+                cible.increment(MonstreCombatAPI.COLONNE_PV,-NBDegats);
+                cible.saveInBackground();
+                break;
+        }
+    }
+
+
 
 }
