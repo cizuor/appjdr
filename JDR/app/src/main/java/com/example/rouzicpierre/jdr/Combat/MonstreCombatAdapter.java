@@ -2,6 +2,7 @@ package com.example.rouzicpierre.jdr.Combat;
 
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 public class MonstreCombatAdapter extends RecyclerView.Adapter<MonstreCombatAdapter.ViewHolder> {
 
     private ArrayList<ParseObject> listEquipe = new ArrayList<>();
-    private ArrayList<ParseObject> listMonstres = new ArrayList<>();
+    private ArrayList<ParseObject> listMonstres = new ArrayList<ParseObject>();
     private ArrayList<ParseObject> listTypeAttaques;
     private ArrayList<ParseObject> listCombatants;
     private ArrayList listTypeDegats = new ArrayList<>();
@@ -41,7 +42,7 @@ public class MonstreCombatAdapter extends RecyclerView.Adapter<MonstreCombatAdap
         this.listCombatants=listCombatants;
         for (int i = 0; i < listCombatants.size() ; i++) {
             if (listCombatants.get(i).getInt(MonstreCombatAPI.COLONNE_EQUIPE)!= Menu.Equipe){
-                this.listMonstres.add(listCombatants.get(i));
+                listMonstres.add(listCombatants.get(i));
             }else {
                 this.listEquipe.add(listCombatants.get(i));
             }
@@ -97,6 +98,8 @@ public class MonstreCombatAdapter extends RecyclerView.Adapter<MonstreCombatAdap
             buttonSubire = (Button) itemView.findViewById(R.id.subir);
             buttonFinTour = (Button) itemView.findViewById(R.id.finTour);
             spinnertypeDegat.setAdapter(typeDegatsAdapter);
+            SpinMonstreAdapter spinMonstreAdapter = new SpinMonstreAdapter(myActivity.getApplicationContext(),listMonstres);
+            spinnerCible.setAdapter(spinMonstreAdapter);
         }
 
 
@@ -115,7 +118,7 @@ public class MonstreCombatAdapter extends RecyclerView.Adapter<MonstreCombatAdap
             buttonAttaque.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onClickAttaque(listMonstres.get(0),listTypeAttaques.get(0),checkBoxDos.isChecked());
+                    onClickAttaque((ParseObject)spinnerCible.getSelectedItem(),listTypeAttaques.get(0),checkBoxDos.isChecked());
                 }
             });
             buttonSubire.setOnClickListener(new View.OnClickListener() {
@@ -136,6 +139,7 @@ public class MonstreCombatAdapter extends RecyclerView.Adapter<MonstreCombatAdap
 
 
         public void onClickAttaque(ParseObject cible, ParseObject typeAttaque, Boolean dos){
+            Log.i("test","test attaque sur "+cible.getString(MonstreCombatAPI.COLONNE_NOM)+" dans le dos ? "+dos);
 
         }
 
