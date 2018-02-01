@@ -9,20 +9,21 @@ import android.widget.TextView;
 
 import com.example.rouzicpierre.jdr.R;
 import com.example.rouzicpierre.jdr.api.MonstreCombatAPI;
+import com.example.rouzicpierre.jdr.api.TypeAttaqueAPI;
 import com.parse.ParseObject;
 
 import java.util.ArrayList;
 
 /**
- * Created by pierre on 30/01/2018.
+ * Created by pierre on 31/01/2018.
  */
 
-public class SpinMonstreAdapter extends BaseAdapter {
+public class SpinAttaqueAdapter  extends BaseAdapter {
     Context context;
     ArrayList<ParseObject> objects;
     LayoutInflater inflater;
 
-    public SpinMonstreAdapter(Context context,ArrayList<ParseObject> objects){
+    public SpinAttaqueAdapter(Context context,ArrayList<ParseObject> objects){
         this.context=context;
         this.objects=objects;
         inflater = (LayoutInflater.from(context));
@@ -48,7 +49,7 @@ public class SpinMonstreAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         view = inflater.inflate(R.layout.adapter_spin_custum_textview,null);
         TextView nom = (TextView) view.findViewById(R.id.nom);
-        nom.setText(objects.get(i).getString(MonstreCombatAPI.COLONNE_NOM)+" "+objects.get(i).getInt(MonstreCombatAPI.COLONNE_EQUIPE));
+        nom.setText(objects.get(i).getString(TypeAttaqueAPI.COLONNE_NOM)+" D"+objects.get(i).getInt(TypeAttaqueAPI.COLONNE_DEGATS)+"% CA "+objects.get(i).getInt(TypeAttaqueAPI.COLONNE_CA)+" CD "+objects.get(i).getInt(TypeAttaqueAPI.COLONNE_CD));
 
         return view;
     }

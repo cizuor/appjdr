@@ -13,7 +13,6 @@ import java.util.ArrayList;
 public class TypeAttaqueAPI {
     public static String TABLE_TYPEATTAQUE="TypeAttaque";
     public static String COLONNE_NOM = "Nom";
-    public static String COLONNE_DESCRIPTION = "Description";
     public static String COLONNE_DEGATS = "Degats";
     public static String COLONNE_CA = "CA";
     public static String COLONNE_CD = "CD";

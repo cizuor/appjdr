@@ -18,5 +18,4 @@ public class MarqueArmureAPI {
     public static String COLONNE_DISCRETION = "Discretion";
     public static String COLONNE_RESISTANCECHAUD = "ResistanceChaud";
     public static String COLONNE_RESISTANCEFROID = "ResistanceFroid";
-    public static String COLONNE_LOOT = "Loot";
 }

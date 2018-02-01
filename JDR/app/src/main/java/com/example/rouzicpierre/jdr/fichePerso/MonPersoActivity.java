@@ -228,7 +228,7 @@ public class MonPersoActivity extends Activity implements StatAdapter.customButt
     public void jetdegat (View view){
         int taille = Integer.parseInt(tDee.getText().toString());
         int nb = Integer.parseInt(nbDee.getText().toString());
-        int d = roll.JetDegat(taille , nb);
+        int d = roll.JetDegat(taille , nb,50);
         d = d + Integer.parseInt(Degatarme.getText().toString());
         d=d+Integer.parseInt(Degat.getText().toString());
         ResultDegats.setText(""+d);

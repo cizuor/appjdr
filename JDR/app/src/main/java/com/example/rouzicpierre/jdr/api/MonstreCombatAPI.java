@@ -42,7 +42,9 @@ public class MonstreCombatAPI {
     public static String COLONNE_PLAYED = "Played";
     public static String COLONNE_BONUSPARADE = "BonusParade";
     public static String COLONNE_NBPARADE = "NBParade";
+    public static String COLONNE_NBPARADEMAX = "NBParadeMax";
     public static String COLONNE_DEGATPARER = "DegatParer";
+    public static String COLONNE_DEGATCRIT = "DegatCrit";
 
     public ArrayList<ParseObject> getMonstres(){
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TABLE_MONSTRECOMBAT);

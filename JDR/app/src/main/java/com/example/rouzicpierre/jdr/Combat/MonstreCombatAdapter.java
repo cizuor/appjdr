@@ -18,7 +18,9 @@ import com.example.rouzicpierre.jdr.Menu;
 import com.example.rouzicpierre.jdr.R;
 import com.example.rouzicpierre.jdr.api.MonstreCombatAPI;
 import com.example.rouzicpierre.jdr.api.TypeAttaqueAPI;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 
@@ -33,12 +35,12 @@ public class MonstreCombatAdapter extends RecyclerView.Adapter<MonstreCombatAdap
     private ArrayList<ParseObject> listTypeAttaques;
     private ArrayList<ParseObject> listCombatants;
     private ArrayList listTypeDegats = new ArrayList<>();
-    private Activity myActivity;
+    private Combat myActivity;
     private TypeAttaqueAPI typeAttaqueAPI = new TypeAttaqueAPI();
     private ArrayAdapter<String> typeDegatsAdapter;
     private LanceurDeDee lanceurDeDee = LanceurDeDee.getLanceurDeDee();
 
-    public MonstreCombatAdapter(ArrayList<ParseObject> listCombatants,Activity myActivity ) {
+    public MonstreCombatAdapter(ArrayList<ParseObject> listCombatants,Combat myActivity ) {
         this.listCombatants=listCombatants;
         for (int i = 0; i < listCombatants.size() ; i++) {
             if (listCombatants.get(i).getInt(MonstreCombatAPI.COLONNE_EQUIPE)!= Menu.Equipe){
@@ -98,8 +100,12 @@ public class MonstreCombatAdapter extends RecyclerView.Adapter<MonstreCombatAdap
             buttonSubire = (Button) itemView.findViewById(R.id.subir);
             buttonFinTour = (Button) itemView.findViewById(R.id.finTour);
             spinnertypeDegat.setAdapter(typeDegatsAdapter);
+
             SpinMonstreAdapter spinMonstreAdapter = new SpinMonstreAdapter(myActivity.getApplicationContext(),listMonstres);
             spinnerCible.setAdapter(spinMonstreAdapter);
+
+            SpinAttaqueAdapter spinAttaqueAdapter = new SpinAttaqueAdapter(myActivity.getApplicationContext(),listTypeAttaques);
+            spinnertypeAttaque.setAdapter(spinAttaqueAdapter);
         }
 
 
@@ -114,11 +120,15 @@ public class MonstreCombatAdapter extends RecyclerView.Adapter<MonstreCombatAdap
                 buttonFinTour.setEnabled(false);
                 buttonAttaque.setEnabled(false);
                 buttonSubire.setEnabled(false);
+            }else{
+                buttonFinTour.setEnabled(true);
+                buttonAttaque.setEnabled(true);
+                buttonSubire.setEnabled(true);
             }
             buttonAttaque.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onClickAttaque((ParseObject)spinnerCible.getSelectedItem(),listTypeAttaques.get(0),checkBoxDos.isChecked());
+                    onClickAttaque((ParseObject)spinnerCible.getSelectedItem(),(ParseObject)spinnertypeAttaque.getSelectedItem(),checkBoxDos.isChecked());
                 }
             });
             buttonSubire.setOnClickListener(new View.OnClickListener() {
@@ -139,7 +149,7 @@ public class MonstreCombatAdapter extends RecyclerView.Adapter<MonstreCombatAdap
 
 
         public void onClickAttaque(ParseObject cible, ParseObject typeAttaque, Boolean dos){
-            Log.i("test","test attaque sur "+cible.getString(MonstreCombatAPI.COLONNE_NOM)+" dans le dos ? "+dos);
+            lanceurDeDee.Attaque(monstre,cible,typeAttaque,dos,myActivity);
 
         }
 
@@ -149,8 +159,7 @@ public class MonstreCombatAdapter extends RecyclerView.Adapter<MonstreCombatAdap
         }
 
         public void onClickFinTour(){
-            //todo set nbparade
-
+            monstre.put(MonstreCombatAPI.COLONNE_NBPARADE,monstre.getInt(MonstreCombatAPI.COLONNE_NBPARADEMAX));
             monstre.put(MonstreCombatAPI.COLONNE_PLAYED,false);
             for (int i = 0; i < listCombatants.size(); i++) {
                 if (monstre.getObjectId().equals(listCombatants.get(i).getObjectId())){
@@ -164,8 +173,12 @@ public class MonstreCombatAdapter extends RecyclerView.Adapter<MonstreCombatAdap
                     i=listCombatants.size();
                 }
             }
-            monstre.saveInBackground();
-
+            monstre.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    myActivity.onResume();
+                }
+            });
 
         }
 
