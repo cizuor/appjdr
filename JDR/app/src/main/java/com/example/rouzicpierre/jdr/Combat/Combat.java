@@ -27,6 +27,7 @@ public class Combat extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
     private MonstreCombatAPI monstreCombatAPI = new MonstreCombatAPI();
     private SwipeRefreshLayout mrefreshLayout;
+    public static int attaqueFaite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,7 @@ public class Combat extends AppCompatActivity {
 
         mRecyclerView = (RecyclerView) findViewById(R.id.combatRecyclerviewCombatant);
         mRecyclerView.setHasFixedSize(true);
-
+        attaqueFaite=0;
 
 
         mrefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

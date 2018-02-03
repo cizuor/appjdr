@@ -24,16 +24,18 @@ import java.util.Map;
 
 public class DeeAdapteur extends RecyclerView.Adapter<DeeAdapteur.ViewHolder> {
 
-    int relance = 0;
-    Map<String,Integer> mapDee;
-    DeeAPI deeAPI;
-    LanceurDeDee lanceurDeDee;
+    private int relance = 0;
+    private Map<String,Integer> mapDee;
+    private DeeAPI deeAPI;
+    private LanceurDeDee lanceurDeDee;
+    private DeePerso myActivity;
 
-    public DeeAdapteur(int relance) {
+    public DeeAdapteur(int relance,DeePerso myActivity) {
         this.relance = relance;
         mapDee = new HashMap();
         deeAPI=new DeeAPI();
         lanceurDeDee=LanceurDeDee.getLanceurDeDee();
+        this.myActivity=myActivity;
 
     }
 
@@ -62,37 +64,56 @@ public class DeeAdapteur extends RecyclerView.Adapter<DeeAdapteur.ViewHolder> {
         private TextView nom;
         private TextView valeur;
         private LinearLayout caseDee;
+
         public ViewHolder(View itemView) {
             super(itemView);
             nom = (TextView) itemView.findViewById(R.id.nomstat);
             valeur = (TextView) itemView.findViewById(R.id.valeurstat);
             caseDee = (LinearLayout) itemView.findViewById(R.id.casedee);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (myActivity.relance>0){
+                        int val=rand(position);
+                        if (Integer.parseInt(valeur.getText().toString())<val){
+                            valeur.setText(Integer.toString(val));
+                        }
+                        myActivity.ActualiseRelance();
+                    }
+                }
+            });
         }
 
 
-        public void display (int position){
-            this.position=position;
+        public void display(int position) {
+            this.position = position;
             nom.setText(deeAPI.numNom.get(position));
             int val;
-            if (deeAPI.numNom.get(position).equals("PV")){
-                val = lanceurDeDee.random(PersoParse.Race.getInt(RaceAPI.COLONNE_PVTYPEDEE),PersoParse.Race.getInt(RaceAPI.COLONNE_PVNBDEE));
-            }else if (deeAPI.numNom.get(position).equals("Taille")){
-                val = lanceurDeDee.random(PersoParse.Race.getInt(RaceAPI.COLONNE_TAILLETYPEDEE),PersoParse.Race.getInt(RaceAPI.COLONNE_TAILLENBDEE));
-            }else if (deeAPI.numNom.get(position).equals("Poid")){
-                val = lanceurDeDee.random(PersoParse.Race.getInt(RaceAPI.COLONNE_POIDTYPEDEE),PersoParse.Race.getInt(RaceAPI.COLONNE_POIDNBDEE));
-            }else if (deeAPI.numNom.get(position).equals("Age")){
-                val = lanceurDeDee.random(PersoParse.Race.getInt(RaceAPI.COLONNE_AGETYPEDEE),PersoParse.Race.getInt(RaceAPI.COLONNE_AGENBDEE));
-            }else {
-                val=lanceurDeDee.random(6,2);
-            }
-            mapDee.put(deeAPI.numNom.get(position),val);
+            val = rand(position);
+
             valeur.setText(Integer.toString(val));
-            if (position%2 == 0 ){
+            if (position % 2 == 0) {
                 caseDee.setBackgroundColor(0xFFFFFFFF);
-            }else{
+            } else {
                 caseDee.setBackgroundColor(0xFFAAAAAA);
             }
         }
 
+        private int rand(int position) {
+            int val;
+            if (deeAPI.numNom.get(position).equals("PV")) {
+                val = lanceurDeDee.random(PersoParse.Race.getInt(RaceAPI.COLONNE_PVTYPEDEE), PersoParse.Race.getInt(RaceAPI.COLONNE_PVNBDEE));
+            } else if (deeAPI.numNom.get(position).equals("Taille")) {
+                val = lanceurDeDee.random(PersoParse.Race.getInt(RaceAPI.COLONNE_TAILLETYPEDEE), PersoParse.Race.getInt(RaceAPI.COLONNE_TAILLENBDEE));
+            } else if (deeAPI.numNom.get(position).equals("Poid")) {
+                val = lanceurDeDee.random(PersoParse.Race.getInt(RaceAPI.COLONNE_POIDTYPEDEE), PersoParse.Race.getInt(RaceAPI.COLONNE_POIDNBDEE));
+            } else if (deeAPI.numNom.get(position).equals("Age")) {
+                val = lanceurDeDee.random(PersoParse.Race.getInt(RaceAPI.COLONNE_AGETYPEDEE), PersoParse.Race.getInt(RaceAPI.COLONNE_AGENBDEE));
+            } else {
+                val = lanceurDeDee.random(6, 2);
+            }
+            mapDee.put(deeAPI.numNom.get(position), val);
+            return val;
+        }
     }
 }

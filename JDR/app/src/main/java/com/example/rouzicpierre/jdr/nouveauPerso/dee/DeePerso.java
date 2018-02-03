@@ -23,8 +23,8 @@ public class DeePerso extends AppCompatActivity {
     TextView tvrelance;
 
     private DeeAdapteur adapter;
-    int relance ;
-    LanceurDeDee lanceurDeDee;
+    public int relance ;
+    private LanceurDeDee lanceurDeDee;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +34,13 @@ public class DeePerso extends AppCompatActivity {
         lanceurDeDee = LanceurDeDee.getLanceurDeDee();
         rvDee.setLayoutManager(new LinearLayoutManager(this));
         relance = lanceurDeDee.random(3,1);
-        adapter = new DeeAdapteur(relance);
+        adapter = new DeeAdapteur(relance,this);
         tvrelance.setText(Integer.toString(relance));
         rvDee.setAdapter(adapter);
 
+    }
+    public void ActualiseRelance(){
+        relance=relance-1;
+        tvrelance.setText(Integer.toString(relance));
     }
 }

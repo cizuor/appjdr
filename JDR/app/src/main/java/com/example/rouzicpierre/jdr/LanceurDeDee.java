@@ -124,20 +124,20 @@ public class LanceurDeDee {
         if (jetCA==200){
             result = result + "est un critique et touche ";
             totalCA = bonusCA+ 200 + attaquant.getInt(MonstreCombatAPI.COLONNE_CA)+(attaquant.getInt(MonstreCombatAPI.COLONNE_CC)/10)+typeAttaque.getInt(TypeAttaqueAPI.COLONNE_CA);
-            totalDegats=CalculeDegats(attaquant,atBaseArme,atMarqueArme,atMetalArme,true,false,typeAttaque);
+            totalDegats=CalculeDegats(attaquant,atBaseArme,atMarqueArme,atMetalArme,true,false,typeAttaque,dos);
             result = result+" et inflige "+totalDegats;
             DégatSubit(cible,"physique",totalDegats);
         }else if ( jetCA == 100 ){
             result = result + "est un echec critique et touche un allié ou vous même ";
             totalCA = bonusCA+-200 + attaquant.getInt(MonstreCombatAPI.COLONNE_CA)+(attaquant.getInt(MonstreCombatAPI.COLONNE_CC)/10)+typeAttaque.getInt(TypeAttaqueAPI.COLONNE_CA);
-            totalDegats=CalculeDegats(attaquant,atBaseArme,atMarqueArme,atMetalArme,false,false,typeAttaque);
+            totalDegats=CalculeDegats(attaquant,atBaseArme,atMarqueArme,atMetalArme,false,false,typeAttaque,false);
             result = result+" et inflige "+totalDegats;
 
         }else {
             totalCA =bonusCA+ jetCA + attaquant.getInt(MonstreCombatAPI.COLONNE_CA)+(attaquant.getInt(MonstreCombatAPI.COLONNE_CC)/10)+typeAttaque.getInt(TypeAttaqueAPI.COLONNE_CA);
             if (totalCA>totalCD){
                 result = result+"est une réussite et touche ";
-                totalDegats=CalculeDegats(attaquant,atBaseArme,atMarqueArme,atMetalArme,false,false,typeAttaque);
+                totalDegats=CalculeDegats(attaquant,atBaseArme,atMarqueArme,atMetalArme,false,false,typeAttaque,dos);
 
                 if (nbParades>0){
                     int degatApresParade;
@@ -168,20 +168,20 @@ public class LanceurDeDee {
             if (jetCA==200){
                 result = result + "est un critique et touche ";
                 totalCA = bonusCA+ 200 + attaquant.getInt(MonstreCombatAPI.COLONNE_CA)+(attaquant.getInt(MonstreCombatAPI.COLONNE_CC)/10)+typeAttaque.getInt(TypeAttaqueAPI.COLONNE_CA);
-                totalDegats=CalculeDegats(attaquant,atBaseArme2,atMarqueArme2,atMetalArme2,true,true,typeAttaque);
+                totalDegats=CalculeDegats(attaquant,atBaseArme2,atMarqueArme2,atMetalArme2,true,true,typeAttaque,dos);
                 result = result+" et inflige "+totalDegats;
                 DégatSubit(cible,"physique",totalDegats);
             }else if ( jetCA == 100 ){
                 result = result + "est un echec critique et touche un allié ou vous même ";
                 totalCA = bonusCA+-200 + attaquant.getInt(MonstreCombatAPI.COLONNE_CA)+(attaquant.getInt(MonstreCombatAPI.COLONNE_CC)/10)+typeAttaque.getInt(TypeAttaqueAPI.COLONNE_CA);
-                totalDegats=CalculeDegats(attaquant,atBaseArme2,atMarqueArme2,atMetalArme2,false,true,typeAttaque);
+                totalDegats=CalculeDegats(attaquant,atBaseArme2,atMarqueArme2,atMetalArme2,false,true,typeAttaque,false);
                 result = result+" et inflige "+totalDegats;
             }else {
                 totalCA =bonusCA+ jetCA + attaquant.getInt(MonstreCombatAPI.COLONNE_CA)+(attaquant.getInt(MonstreCombatAPI.COLONNE_CC)/10)+typeAttaque.getInt(TypeAttaqueAPI.COLONNE_CA);
                 if (totalCA>totalCD){
                     result = result+"est une réussite et touche ";
-                    totalDegats=CalculeDegats(attaquant,atBaseArme2,atMarqueArme2,atMetalArme2,false,true,typeAttaque);
-                    result = result+" et inflige "+totalDegats;
+                    totalDegats=CalculeDegats(attaquant,atBaseArme2,atMarqueArme2,atMetalArme2,false,true,typeAttaque,dos);
+
                     if (nbParades>0){
                         int degatApresParade;
                         degatApresParade = Parrade(cible,totalDegats);
@@ -220,12 +220,25 @@ public class LanceurDeDee {
     }
 
     //todo choisir qoi faire comme boost avec les toucher critique
-    public int CalculeDegats(ParseObject attaquant,ParseObject atBaseArme,ParseObject atMarqueArme,ParseObject atMetalArme,Boolean crit,Boolean mainGauche,ParseObject typeAttaque){
+    public int CalculeDegats(ParseObject attaquant,ParseObject atBaseArme,ParseObject atMarqueArme,ParseObject atMetalArme,Boolean crit,Boolean mainGauche,ParseObject typeAttaque,Boolean dos){
         int degatcrit = attaquant.getInt(MonstreCombatAPI.COLONNE_DEGATCRIT)+atBaseArme.getInt(ArmeBaseAPI.COLONNE_DEGATCRITIQUE)+atMarqueArme.getInt(MarqueArmeAPI.COLONNE_DEGATCRIT)+atMetalArme.getInt(MetalArmeAPI.COLONNE_DEGATCRIT);
         int totalBonusDegats = attaquant.getInt(MonstreCombatAPI.COLONNE_BONUSDEGAT)+(atBaseArme.getInt(ArmeBaseAPI.COLONNE_DEGATBASE)+(attaquant.getInt(MonstreCombatAPI.COLONNE_F)/10));
         int déesDegats = atBaseArme.getInt(ArmeBaseAPI.COLONNE_TYPEDEE);
         int nbDee = atBaseArme.getInt(ArmeBaseAPI.COLONNE_NBDEE);
         int degats = JetDegat(déesDegats,nbDee,degatcrit);
+        if (atBaseArme.getBoolean(ArmeBaseAPI.COLONNE_DEUXMAINS)){
+            int percutant = JetDegat(déesDegats,nbDee,degatcrit);
+            if (percutant>degats){
+                degats = percutant;
+            }
+        }
+        if (atMarqueArme.getBoolean(MarqueArmeAPI.COLONNE_PERCUTANT)){
+            int percutant = JetDegat(déesDegats,nbDee,degatcrit);
+            if (percutant>degats){
+                degats = percutant;
+            }
+        }
+
         degats=degats+totalBonusDegats;
         int degatfinaux;
         if (mainGauche){
@@ -234,6 +247,12 @@ public class LanceurDeDee {
             degatfinaux =100+ atMarqueArme.getInt(MarqueArmeAPI.COLONNE_DEGATS)+atMetalArme.getInt(MetalArmeAPI.COLONNE_DEGATS)+typeAttaque.getInt(TypeAttaqueAPI.COLONNE_DEGATS);
         }
         degats= (degats*degatfinaux)/100;
+        if (dos){
+            int degatdos =attaquant.getInt(MonstreCombatAPI.COLONNE_BONUSDOS)+atBaseArme.getInt(ArmeBaseAPI.COLONNE_BONUSDOS)+atMarqueArme.getInt(MarqueArmeAPI.COLONNE_DEGATDOS)+atMetalArme.getInt(MetalArmeAPI.COLONNE_DEGATDOS)+100;
+            Log.i("test","test dos = "+degats);
+            degats = (degats*degatdos)/100;
+            Log.i("test","test degatdos = "+degats);
+        }
 
         return degats;
     }

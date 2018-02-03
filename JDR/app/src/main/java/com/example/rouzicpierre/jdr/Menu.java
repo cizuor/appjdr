@@ -1,6 +1,8 @@
 package com.example.rouzicpierre.jdr;
 
+import android.Manifest;
 import android.content.Intent;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.rouzicpierre.jdr.Combat.Combat;
+import com.example.rouzicpierre.jdr.Comp.NewComp;
 import com.example.rouzicpierre.jdr.fichePerso.MonPersoActivity;
 import com.example.rouzicpierre.jdr.nouveauPerso.race.NouveauPersoParse;
 import com.orm.SugarRecord;
@@ -20,26 +23,35 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static butterknife.internal.Utils.arrayOf;
+
 public class Menu extends AppCompatActivity {
 
     @BindView(R.id.buttonmonperso) Button monperso;
     @BindView(R.id.nompersofetch)    EditText nom;
     @BindView(R.id.menuButtonCombat) Button combat;
     @BindView(R.id.menuEditEquipe) EditText equipe;
+    @BindView(R.id.menuButtonComp) Button comp;
     public static int Equipe;
+    public static Boolean premier = true;
     Perso perso;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         ButterKnife.bind(this);
-        Parse.enableLocalDatastore(this);
-        Parse.initialize(new Parse.Configuration.Builder(this)
-                .applicationId("Mm6O7tRLRJqh9xamUmmscI8bZRMZWS9L7EnBxSOB")
-                .server("https://parseapi.back4app.com/")
-                .clientKey("1WrFFbjqDq72WBGQP2spcyUreociFTn4KLJWU8Qn")
-                .build()
-        );
+
+
+        if (premier) {
+            Parse.enableLocalDatastore(this);
+            Parse.initialize(new Parse.Configuration.Builder(this)
+                    .applicationId("Mm6O7tRLRJqh9xamUmmscI8bZRMZWS9L7EnBxSOB")
+                    .server("https://parseapi.back4app.com/")
+                    .clientKey("1WrFFbjqDq72WBGQP2spcyUreociFTn4KLJWU8Qn")
+                    .build()
+            );
+            premier=false;
+        }
         //App app = new App();
 
         ParseUser.enableRevocableSessionInBackground();
@@ -67,6 +79,12 @@ public class Menu extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onClickCombat();
+            }
+        });
+        comp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickComp();
             }
         });
 
@@ -136,6 +154,12 @@ public class Menu extends AppCompatActivity {
             Toast toast = Toast.makeText(this, "choisir equipe ", Toast.LENGTH_LONG);
             toast.show();
         }
+    }
+
+    public void onClickComp(){
+        Intent myIntent = new Intent(Menu.this, NewComp.class);
+        //myIntent.putExtra("key", value); //Optional parameters
+        this.startActivity(myIntent);
     }
 
 

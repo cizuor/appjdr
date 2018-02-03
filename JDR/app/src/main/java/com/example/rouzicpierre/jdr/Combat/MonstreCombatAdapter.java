@@ -87,6 +87,7 @@ public class MonstreCombatAdapter extends RecyclerView.Adapter<MonstreCombatAdap
         private Button buttonAttaque;
         private Button buttonFinTour;
         private ParseObject monstre;
+        private int NBAttaque;
         public ViewHolder(final View itemView) {
             super(itemView);
             nom = (TextView) itemView.findViewById(R.id.nom);
@@ -116,6 +117,8 @@ public class MonstreCombatAdapter extends RecyclerView.Adapter<MonstreCombatAdap
             this.monstre = monstre;
             nom.setText(monstre.getString(MonstreCombatAPI.COLONNE_NOM));
             PV.setText(String.valueOf(monstre.getInt(MonstreCombatAPI.COLONNE_PV)));
+            NBAttaque = monstre.getInt(MonstreCombatAPI.COLONNE_AT);
+
             if (!monstre.getBoolean(MonstreCombatAPI.COLONNE_PLAYED)){
                 buttonFinTour.setEnabled(false);
                 buttonAttaque.setEnabled(false);
@@ -124,6 +127,9 @@ public class MonstreCombatAdapter extends RecyclerView.Adapter<MonstreCombatAdap
                 buttonFinTour.setEnabled(true);
                 buttonAttaque.setEnabled(true);
                 buttonSubire.setEnabled(true);
+            }
+            if (Combat.attaqueFaite >= NBAttaque){
+                buttonAttaque.setEnabled(false);
             }
             buttonAttaque.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -149,7 +155,11 @@ public class MonstreCombatAdapter extends RecyclerView.Adapter<MonstreCombatAdap
 
 
         public void onClickAttaque(ParseObject cible, ParseObject typeAttaque, Boolean dos){
+            Combat.attaqueFaite = Combat.attaqueFaite+1;
             lanceurDeDee.Attaque(monstre,cible,typeAttaque,dos,myActivity);
+            if (Combat.attaqueFaite >= NBAttaque){
+                buttonAttaque.setEnabled(false);
+            }
 
         }
 
@@ -173,6 +183,7 @@ public class MonstreCombatAdapter extends RecyclerView.Adapter<MonstreCombatAdap
                     i=listCombatants.size();
                 }
             }
+            Combat.attaqueFaite = 0;
             monstre.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
