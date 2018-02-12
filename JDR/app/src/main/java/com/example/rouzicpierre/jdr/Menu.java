@@ -33,7 +33,6 @@ public class Menu extends AppCompatActivity {
     @BindView(R.id.menuEditEquipe) EditText equipe;
     @BindView(R.id.menuButtonComp) Button comp;
     public static int Equipe;
-    public static Boolean premier = true;
     Perso perso;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,16 +41,13 @@ public class Menu extends AppCompatActivity {
         ButterKnife.bind(this);
 
 
-        if (premier) {
-            Parse.enableLocalDatastore(this);
-            Parse.initialize(new Parse.Configuration.Builder(this)
-                    .applicationId("Mm6O7tRLRJqh9xamUmmscI8bZRMZWS9L7EnBxSOB")
-                    .server("https://parseapi.back4app.com/")
-                    .clientKey("1WrFFbjqDq72WBGQP2spcyUreociFTn4KLJWU8Qn")
-                    .build()
-            );
-            premier=false;
-        }
+        Parse.enableLocalDatastore(this);
+        Parse.initialize(new Parse.Configuration.Builder(this)
+                .applicationId("Mm6O7tRLRJqh9xamUmmscI8bZRMZWS9L7EnBxSOB")
+                .server("https://parseapi.back4app.com/")
+                .clientKey("1WrFFbjqDq72WBGQP2spcyUreociFTn4KLJWU8Qn")
+                .build()
+        );
         //App app = new App();
 
         ParseUser.enableRevocableSessionInBackground();

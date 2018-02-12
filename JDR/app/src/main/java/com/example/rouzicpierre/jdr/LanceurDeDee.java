@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.rouzicpierre.jdr.EffetTemporaire.CD;
+import com.example.rouzicpierre.jdr.EffetTemporaire.Effect;
+import com.example.rouzicpierre.jdr.EffetTemporaire.ListEffect;
 import com.example.rouzicpierre.jdr.api.ArmeAPI;
 import com.example.rouzicpierre.jdr.api.ArmeBaseAPI;
 import com.example.rouzicpierre.jdr.api.MarqueArmeAPI;
@@ -25,6 +28,7 @@ public class LanceurDeDee {
     private LanceurDeDee(){
         rand = new Random();
     }
+    private ListEffect listEffect = ListEffect.getListEffect();
 
     public static LanceurDeDee getLanceurDeDee() {
         if (lanceurDeDee==null){
@@ -120,6 +124,11 @@ public class LanceurDeDee {
 
         bonusCA = attaquant.getInt(MonstreCombatAPI.COLONNE_CA)+(attaquant.getInt(MonstreCombatAPI.COLONNE_CC)/10)+typeAttaque.getInt(TypeAttaqueAPI.COLONNE_CA);
         totalCD = cible.getInt(MonstreCombatAPI.COLONNE_CD)+(cible.getInt(MonstreCombatAPI.COLONNE_CC)/10)+(cible.getInt(MonstreCombatAPI.COLONNE_AG)/10)+5;
+
+        if (typeAttaque.getInt(TypeAttaqueAPI.COLONNE_CD)!=0){
+            Effect effect = new CD(attaquant,attaquant,typeAttaque.getInt(TypeAttaqueAPI.COLONNE_CD),1);
+            listEffect.addEffects(effect);
+        }
 
         if (jetCA==200){
             result = result + "est un critique et touche ";
@@ -222,7 +231,7 @@ public class LanceurDeDee {
     //todo choisir qoi faire comme boost avec les toucher critique
     public int CalculeDegats(ParseObject attaquant,ParseObject atBaseArme,ParseObject atMarqueArme,ParseObject atMetalArme,Boolean crit,Boolean mainGauche,ParseObject typeAttaque,Boolean dos){
         int degatcrit = attaquant.getInt(MonstreCombatAPI.COLONNE_DEGATCRIT)+atBaseArme.getInt(ArmeBaseAPI.COLONNE_DEGATCRITIQUE)+atMarqueArme.getInt(MarqueArmeAPI.COLONNE_DEGATCRIT)+atMetalArme.getInt(MetalArmeAPI.COLONNE_DEGATCRIT);
-        int totalBonusDegats = attaquant.getInt(MonstreCombatAPI.COLONNE_BONUSDEGAT)+(atBaseArme.getInt(ArmeBaseAPI.COLONNE_DEGATBASE)+(attaquant.getInt(MonstreCombatAPI.COLONNE_F)/10));
+        int totalBonusDegats = (atBaseArme.getInt(ArmeBaseAPI.COLONNE_DEGATBASE)+(attaquant.getInt(MonstreCombatAPI.COLONNE_F)/10));
         int déesDegats = atBaseArme.getInt(ArmeBaseAPI.COLONNE_TYPEDEE);
         int nbDee = atBaseArme.getInt(ArmeBaseAPI.COLONNE_NBDEE);
         int degats = JetDegat(déesDegats,nbDee,degatcrit);
@@ -242,16 +251,14 @@ public class LanceurDeDee {
         degats=degats+totalBonusDegats;
         int degatfinaux;
         if (mainGauche){
-            degatfinaux =50+ atMarqueArme.getInt(MarqueArmeAPI.COLONNE_DEGATS)+atMetalArme.getInt(MetalArmeAPI.COLONNE_DEGATS)+typeAttaque.getInt(TypeAttaqueAPI.COLONNE_DEGATS);
+            degatfinaux =50+ atMarqueArme.getInt(MarqueArmeAPI.COLONNE_DEGATS)+atMetalArme.getInt(MetalArmeAPI.COLONNE_DEGATS)+typeAttaque.getInt(TypeAttaqueAPI.COLONNE_DEGATS)+attaquant.getInt(MonstreCombatAPI.COLONNE_BONUSDEGAT);
         }else {
-            degatfinaux =100+ atMarqueArme.getInt(MarqueArmeAPI.COLONNE_DEGATS)+atMetalArme.getInt(MetalArmeAPI.COLONNE_DEGATS)+typeAttaque.getInt(TypeAttaqueAPI.COLONNE_DEGATS);
+            degatfinaux =100+ atMarqueArme.getInt(MarqueArmeAPI.COLONNE_DEGATS)+atMetalArme.getInt(MetalArmeAPI.COLONNE_DEGATS)+typeAttaque.getInt(TypeAttaqueAPI.COLONNE_DEGATS)+attaquant.getInt(MonstreCombatAPI.COLONNE_BONUSDEGAT);
         }
         degats= (degats*degatfinaux)/100;
         if (dos){
             int degatdos =attaquant.getInt(MonstreCombatAPI.COLONNE_BONUSDOS)+atBaseArme.getInt(ArmeBaseAPI.COLONNE_BONUSDOS)+atMarqueArme.getInt(MarqueArmeAPI.COLONNE_DEGATDOS)+atMetalArme.getInt(MetalArmeAPI.COLONNE_DEGATDOS)+100;
-            Log.i("test","test dos = "+degats);
             degats = (degats*degatdos)/100;
-            Log.i("test","test degatdos = "+degats);
         }
 
         return degats;
@@ -261,6 +268,7 @@ public class LanceurDeDee {
         switch (typeDegats){
             case "physique":
                 if (cible.getInt(MonstreCombatAPI.COLONNE_ARMURE)>NBDegats){
+                    NBDegats =NBDegats- (NBDegats*cible.getInt(MonstreCombatAPI.COLONNE_REDUCDEGATS))/100;
                     cible.increment(MonstreCombatAPI.COLONNE_ARMURE,-NBDegats);
                     cible.saveInBackground();
                 }else if (cible.getInt(MonstreCombatAPI.COLONNE_ARMURE)!=0){

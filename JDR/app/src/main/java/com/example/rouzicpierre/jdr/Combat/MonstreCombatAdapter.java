@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.rouzicpierre.jdr.EffetTemporaire.ListEffect;
 import com.example.rouzicpierre.jdr.LanceurDeDee;
 import com.example.rouzicpierre.jdr.Menu;
 import com.example.rouzicpierre.jdr.R;
@@ -39,6 +40,7 @@ public class MonstreCombatAdapter extends RecyclerView.Adapter<MonstreCombatAdap
     private TypeAttaqueAPI typeAttaqueAPI = new TypeAttaqueAPI();
     private ArrayAdapter<String> typeDegatsAdapter;
     private LanceurDeDee lanceurDeDee = LanceurDeDee.getLanceurDeDee();
+    private ListEffect listEffect = ListEffect.getListEffect();
 
     public MonstreCombatAdapter(ArrayList<ParseObject> listCombatants,Combat myActivity ) {
         this.listCombatants=listCombatants;
@@ -78,6 +80,8 @@ public class MonstreCombatAdapter extends RecyclerView.Adapter<MonstreCombatAdap
 
         private TextView nom;
         private TextView PV;
+        private TextView A;
+        private TextView RM;
         private Spinner spinnertypeAttaque;
         private Spinner spinnerCible;
         private Spinner spinnertypeDegat;
@@ -92,6 +96,8 @@ public class MonstreCombatAdapter extends RecyclerView.Adapter<MonstreCombatAdap
             super(itemView);
             nom = (TextView) itemView.findViewById(R.id.nom);
             PV = (TextView) itemView.findViewById(R.id.PV);
+            A = (TextView) itemView.findViewById(R.id.A);
+            RM = (TextView) itemView.findViewById(R.id.RM);
             spinnerCible = (Spinner) itemView.findViewById(R.id.cible);
             buttonAttaque = (Button) itemView.findViewById(R.id.attaque);
             spinnertypeAttaque = (Spinner) itemView.findViewById(R.id.typeAttaque);
@@ -117,6 +123,9 @@ public class MonstreCombatAdapter extends RecyclerView.Adapter<MonstreCombatAdap
             this.monstre = monstre;
             nom.setText(monstre.getString(MonstreCombatAPI.COLONNE_NOM));
             PV.setText(String.valueOf(monstre.getInt(MonstreCombatAPI.COLONNE_PV)));
+            A.setText(String.valueOf(monstre.getInt(MonstreCombatAPI.COLONNE_ARMURE)));
+            RM.setText(String.valueOf(monstre.getInt(MonstreCombatAPI.COLONNE_RM)));
+
             NBAttaque = monstre.getInt(MonstreCombatAPI.COLONNE_AT);
 
             if (!monstre.getBoolean(MonstreCombatAPI.COLONNE_PLAYED)){
@@ -169,6 +178,7 @@ public class MonstreCombatAdapter extends RecyclerView.Adapter<MonstreCombatAdap
         }
 
         public void onClickFinTour(){
+            listEffect.finDeTour(monstre);
             monstre.put(MonstreCombatAPI.COLONNE_NBPARADE,monstre.getInt(MonstreCombatAPI.COLONNE_NBPARADEMAX));
             monstre.put(MonstreCombatAPI.COLONNE_PLAYED,false);
             for (int i = 0; i < listCombatants.size(); i++) {

@@ -46,6 +46,7 @@ public class MonstreCombatAPI {
     public static String COLONNE_DEGATPARER = "DegatParer";
     public static String COLONNE_DEGATCRIT = "DegatCrit";
     public static String COLONNE_BONUSDOS = "BonusDos";
+    public static String COLONNE_REDUCDEGATS = "ReducDegats";
 
     public ArrayList<ParseObject> getMonstres(){
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TABLE_MONSTRECOMBAT);

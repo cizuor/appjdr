@@ -44,6 +44,7 @@ public class BestiaireAPI {
     public static String COLONNE_NBPARADE = "NBParade";
     public static String COLONNE_DEGATPARER = "DegatParer";
     public static String COLONNE_BONUSDOS = "BonusDos";
+    public static String COLONNE_REDUCDEGATS = "ReducDegats";
 
 
 
@@ -162,6 +163,7 @@ public class BestiaireAPI {
             combat.put(MonstreCombatAPI.COLONNE_NBPARADEMAX,NBParade);
             combat.put(MonstreCombatAPI.COLONNE_DEGATPARER,degatParer);
             combat.put(MonstreCombatAPI.COLONNE_BONUSDOS,bestiaire.getInt(COLONNE_BONUSDOS));
+            combat.put(MonstreCombatAPI.COLONNE_REDUCDEGATS,bestiaire.getInt(COLONNE_REDUCDEGATS)+armureBase.getInt(ArmureBaseAPI.COLONNE_REDUCDEGATCRIT));
             try {
                 combat.put(MonstreCombatAPI.COLONNE_MAINDROITE, bestiaire.getParseObject(COLONNE_MAINDROITE));
             }catch (IllegalArgumentException e){
