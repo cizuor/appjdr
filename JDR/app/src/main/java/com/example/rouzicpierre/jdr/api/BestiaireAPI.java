@@ -133,11 +133,11 @@ public class BestiaireAPI {
                 totalBonusCA = totalBonusCA +baseArme2.getInt(ArmeBaseAPI.COLONNE_CA) + metalArme2.getInt(MetalArmeAPI.COLONNE_CA) + marqueArme2.getInt(MarqueArmeAPI.COLONNE_CA);
             }
 
-            combat.put(MonstreCombatAPI.COLONNE_CA, bestiaire.getInt(COLONNE_CA)+totalBonusCA);
-            combat.put(MonstreCombatAPI.COLONNE_CD, bestiaire.getInt(COLONNE_CD)+totalBonusCD);
+            combat.put(MonstreCombatAPI.COLONNE_CA,totalBonusCA);
+            combat.put(MonstreCombatAPI.COLONNE_CD,totalBonusCD);
 
 
-            combat.put(MonstreCombatAPI.COLONNE_ARMURE, bestiaire.getInt(COLONNE_ARMURE)+((bestiaire.getInt(COLONNE_E)/10)*3)+ ((armureBase.getInt(ArmureBaseAPI.COLONNE_ARMURE)*(marqueArmure.getInt(MarqueArmureAPI.COLONNE_ARMURE)+100))/100));
+            combat.put(MonstreCombatAPI.COLONNE_ARMURE, bestiaire.getInt(COLONNE_ARMURE)+ ((armureBase.getInt(ArmureBaseAPI.COLONNE_ARMURE)*(marqueArmure.getInt(MarqueArmureAPI.COLONNE_ARMURE)+100))/100));
             combat.put(MonstreCombatAPI.COLONNE_RM, bestiaire.getInt(COLONNE_RM)+((bestiaire.getInt(COLONNE_FM)/10)*3)+((armureBase.getInt(ArmureBaseAPI.COLONNE_RM)*(marqueArmure.getInt(MarqueArmureAPI.COLONNE_RM)+100))/100) );
             combat.put(MonstreCombatAPI.COLONNE_MOUVEMENT, bestiaire.getInt(COLONNE_MOUVEMENT)+armureBase.getInt(ArmureBaseAPI.COLONNE_MOUVEMENT)+marqueArmure.getInt(MarqueArmureAPI.COLONNE_MOUVEMENT));
             combat.put(MonstreCombatAPI.COLONNE_CC, bestiaire.getInt(COLONNE_CC)+armureBase.getInt(ArmureBaseAPI.COLONNE_CCCT)+marqueArmure.getInt(MarqueArmureAPI.COLONNE_CCCT));
@@ -148,8 +148,8 @@ public class BestiaireAPI {
             combat.put(MonstreCombatAPI.COLONNE_FM, bestiaire.getInt(COLONNE_FM));
             combat.put(MonstreCombatAPI.COLONNE_INT, bestiaire.getInt(COLONNE_INT));
             combat.put(MonstreCombatAPI.COLONNE_P, bestiaire.getInt(COLONNE_P));
-            combat.put(MonstreCombatAPI.COLONNE_PV, bestiaire.getInt(COLONNE_PV));
-            combat.put(MonstreCombatAPI.COLONNE_PVMAX, bestiaire.getInt(COLONNE_PV));
+            combat.put(MonstreCombatAPI.COLONNE_PV, (bestiaire.getInt(COLONNE_PV)*(100+bestiaire.getInt(COLONNE_E)))/100);
+            combat.put(MonstreCombatAPI.COLONNE_PVMAX, (bestiaire.getInt(COLONNE_PV)*(100+bestiaire.getInt(COLONNE_E)))/100);
             combat.put(MonstreCombatAPI.COLONNE_AT, bestiaire.getInt(COLONNE_AT));
             combat.put(MonstreCombatAPI.COLONNE_SOC, bestiaire.getInt(COLONNE_SOC));
             combat.put(MonstreCombatAPI.COLONNE_MAG, bestiaire.getInt(COLONNE_MAG));

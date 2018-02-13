@@ -161,16 +161,12 @@ public class LanceurDeDee {
                 DégatSubit(cible,"physique",totalDegats);
             }else {
                 result = result+"est un echec et manque";
-                Toast toast = Toast.makeText(myActivity, result, Toast.LENGTH_LONG);
-                toast.show();
             }
         }
-        Toast toast = Toast.makeText(myActivity, result, Toast.LENGTH_LONG);
-        toast.show();
 
 
         if (atMainGauche){
-            result = " votre attaque avec la main gauche ";
+            result = result+ "\n votre attaque avec la main gauche ";
             bonusCA = bonusCA-2;
             jetCA = JetCA();
 
@@ -207,9 +203,9 @@ public class LanceurDeDee {
 
                 }
             }
-            toast = Toast.makeText(myActivity, result, Toast.LENGTH_LONG);
-            toast.show();
         }
+        Toast toast = Toast.makeText(myActivity, result, Toast.LENGTH_LONG);
+        toast.show();
     }
 
 
