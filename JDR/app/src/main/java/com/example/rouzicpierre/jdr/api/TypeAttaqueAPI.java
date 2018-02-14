@@ -16,10 +16,12 @@ public class TypeAttaqueAPI {
     public static String COLONNE_DEGATS = "Degats";
     public static String COLONNE_CA = "CA";
     public static String COLONNE_CD = "CD";
+    public static String COLONNE_ORDRE = "Ordre";
 
     public ArrayList<ParseObject> getTypeAttaques(){
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TABLE_TYPEATTAQUE);
         ArrayList<ParseObject> listTypeAttaques  = null;
+        query.orderByAscending(COLONNE_ORDRE);
         try {
             listTypeAttaques =new ArrayList<>(query.find());
         } catch (ParseException e) {
